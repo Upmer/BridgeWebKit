@@ -16,7 +16,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let webview = BridgeWebview(bridgeClass: ExampleBridge.self)
+        let webview = BridgeWebview(bridge: ExampleBridge())
         webview.frame = view.bounds
         
         webview.load(URLRequest(url: URL(fileURLWithPath: Bundle.main.path(forResource: "index", ofType: "html")!)))

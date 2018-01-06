@@ -9,15 +9,15 @@
 import UIKit
 import WebKit
 
-protocol NatureBridge {
-    
-}
+class NatureBridge: NSObject { }
 
 class BridgeWebview: WKWebView {
     
     var userContentController: WKUserContentController!
     
-    convenience init(bridgeClass: AnyClass) {
+    var bridge: NatureBridge!
+    
+    convenience init(bridge: NatureBridge) {
         
         let injectJs: String = { () -> String in
             if let path = Bundle.main.path(forResource: "easyjs-inject", ofType: "js") {
@@ -30,14 +30,15 @@ class BridgeWebview: WKWebView {
         let configuration = WKWebViewConfiguration()
         let userContentController = WKUserContentController()
         configuration.userContentController = userContentController
-        
+        let cls: AnyClass = object_getClass(bridge)!
         let injectScript = WKUserScript(source: injectJs, injectionTime: .atDocumentStart, forMainFrameOnly: false)
         userContentController.addUserScript(injectScript)
-        debugPrint(BridgeParser.registerNatureFunction(bridgeClass: bridgeClass))
-        userContentController.addUserScript(WKUserScript(source: BridgeParser.registerNatureFunction(bridgeClass: bridgeClass), injectionTime: .atDocumentStart, forMainFrameOnly: false))
+        debugPrint(BridgeParser.registerNatureFunction(bridgeClass: cls))
+        userContentController.addUserScript(WKUserScript(source: BridgeParser.registerNatureFunction(bridgeClass: cls), injectionTime: .atDocumentStart, forMainFrameOnly: false))
         
         self.init(frame: CGRect.zero, configuration: configuration)
         
+        self.bridge = bridge
         
         self.userContentController = userContentController
         self.navigationDelegate = self
@@ -64,7 +65,7 @@ extension BridgeWebview: WKUIDelegate, WKNavigationDelegate, WKScriptMessageHand
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         let urlStr = navigationAction.request.url?.absoluteString
-        debugPrint(urlStr)
+        BridgeExecutor().executorBridgeCallback(url: urlStr ?? "", bridge: bridge)
         decisionHandler(.allow)
     }
 }
@@ -101,15 +102,21 @@ class BridgeParser {
 }
 
 class BridgeExecutor {
-    func executorBridgeCallback() {
-        
+    func executorBridgeCallback(url: String, bridge: NatureBridge) {
+        if let method = parserCallbackUrl(string: url) {
+            let selector = NSSelectorFromString(method)
+            bridge.perform(selector)
+//            bridge.performSelector(onMainThread: <#T##Selector#>, with: <#T##Any?#>, waitUntilDone: <#T##Bool#>)
+        }
     }
     
-    private func parserCallbackUrl(string: String) {
+    private func parserCallbackUrl(string: String) -> String? {
         guard string.hasPrefix("easy-js:") else {
-            return
+            return nil
         }
         
-        
+        let components = string.components(separatedBy: ":")
+        let method = components[2]
+        return method
     }
 }

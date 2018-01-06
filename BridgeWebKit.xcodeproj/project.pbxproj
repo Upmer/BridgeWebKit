@@ -11,9 +11,6 @@
 		83099D5D1FED2CF2009DE954 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 839A130D1FEBB28300D1E373 /* Main.storyboard */; };
 		8378115E1FFF822F00A29098 /* easyjs-inject.js in Resources */ = {isa = PBXBuildFile; fileRef = 8378115D1FFF822F00A29098 /* easyjs-inject.js */; };
 		837811601FFF886900A29098 /* ExampleBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8378115F1FFF886900A29098 /* ExampleBridge.swift */; };
-		8383F47B1FFE215E00E159A0 /* WebviewJavascriptBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8383F47A1FFE215E00E159A0 /* WebviewJavascriptBridge.swift */; };
-		8383F47D1FFE21BE00E159A0 /* WKWebViewJavascriptBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8383F47C1FFE21BE00E159A0 /* WKWebViewJavascriptBridge.swift */; };
-		8383F47F1FFE220100E159A0 /* WebViewJavascriptBridgeBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8383F47E1FFE220100E159A0 /* WebViewJavascriptBridgeBase.swift */; };
 		839A12F01FEBB20000D1E373 /* BridgeWebKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839A12EF1FEBB20000D1E373 /* BridgeWebKitTests.swift */; };
 		839A12FB1FEBB20000D1E373 /* BridgeWebKitUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839A12FA1FEBB20000D1E373 /* BridgeWebKitUITests.swift */; };
 		839A13111FEBB28300D1E373 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839A13091FEBB28300D1E373 /* AppDelegate.swift */; };
@@ -44,9 +41,6 @@
 /* Begin PBXFileReference section */
 		8378115D1FFF822F00A29098 /* easyjs-inject.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "easyjs-inject.js"; sourceTree = "<group>"; };
 		8378115F1FFF886900A29098 /* ExampleBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleBridge.swift; sourceTree = "<group>"; };
-		8383F47A1FFE215E00E159A0 /* WebviewJavascriptBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebviewJavascriptBridge.swift; sourceTree = "<group>"; };
-		8383F47C1FFE21BE00E159A0 /* WKWebViewJavascriptBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WKWebViewJavascriptBridge.swift; sourceTree = "<group>"; };
-		8383F47E1FFE220100E159A0 /* WebViewJavascriptBridgeBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewJavascriptBridgeBase.swift; sourceTree = "<group>"; };
 		839A12D71FEBB20000D1E373 /* BridgeWebKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BridgeWebKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		839A12EB1FEBB20000D1E373 /* BridgeWebKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BridgeWebKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		839A12EF1FEBB20000D1E373 /* BridgeWebKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeWebKitTests.swift; sourceTree = "<group>"; };
@@ -148,9 +142,6 @@
 			children = (
 				8378115D1FFF822F00A29098 /* easyjs-inject.js */,
 				839A13181FEBB34100D1E373 /* BridgeWebview.swift */,
-				8383F47A1FFE215E00E159A0 /* WebviewJavascriptBridge.swift */,
-				8383F47C1FFE21BE00E159A0 /* WKWebViewJavascriptBridge.swift */,
-				8383F47E1FFE220100E159A0 /* WebViewJavascriptBridgeBase.swift */,
 			);
 			path = BridgeWebKit;
 			sourceTree = "<group>";
@@ -295,10 +286,7 @@
 			files = (
 				837811601FFF886900A29098 /* ExampleBridge.swift in Sources */,
 				839A13191FEBB34100D1E373 /* BridgeWebview.swift in Sources */,
-				8383F47D1FFE21BE00E159A0 /* WKWebViewJavascriptBridge.swift in Sources */,
-				8383F47B1FFE215E00E159A0 /* WebviewJavascriptBridge.swift in Sources */,
 				839A13161FEBB28300D1E373 /* ViewController.swift in Sources */,
-				8383F47F1FFE220100E159A0 /* WebViewJavascriptBridgeBase.swift in Sources */,
 				839A13111FEBB28300D1E373 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

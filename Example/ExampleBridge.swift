@@ -12,7 +12,7 @@ class ExampleBridge: NatureBridge {
     var name = "Peter"
     
     @objc func showAlert() {
-        
+        debugPrint("show alert")
     }
     
     @objc func sysPlatform() -> String {

@@ -74,12 +74,4 @@ injectProperty: function (obj, properties) {
          })();
     }
 },
-
-    getRetValue () {
-        var start = Date.now();
-        while (Date.now() - start < 10000) {
-            if (EasyJS.retValue) return EasyJS.retValue;
-        }
-        return '';
-    }
 };
