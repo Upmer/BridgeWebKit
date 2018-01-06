@@ -17,33 +17,63 @@ class BridgeWebview: WKWebView {
     
     var userContentController: WKUserContentController!
     
-    convenience init() {
+    convenience init(bridgeClass: AnyClass) {
+        
+        let injectJs: String = { () -> String in
+            if let path = Bundle.main.path(forResource: "easyjs-inject", ofType: "js") {
+                let js = try? String(contentsOfFile: path, encoding: .utf8)
+                return js?.replacingOccurrences(of: "\n", with: "").replacingOccurrences(of: "\t", with: "") ?? ""
+            } else {
+                return ""
+            }
+        }()
         let configuration = WKWebViewConfiguration()
         let userContentController = WKUserContentController()
         configuration.userContentController = userContentController
+        
+        let injectScript = WKUserScript(source: injectJs, injectionTime: .atDocumentStart, forMainFrameOnly: false)
+        userContentController.addUserScript(injectScript)
+        debugPrint(BridgeParser.registerNatureFunction(bridgeClass: bridgeClass))
+        userContentController.addUserScript(WKUserScript(source: BridgeParser.registerNatureFunction(bridgeClass: bridgeClass), injectionTime: .atDocumentStart, forMainFrameOnly: false))
+        
         self.init(frame: CGRect.zero, configuration: configuration)
+        
+        
         self.userContentController = userContentController
         self.navigationDelegate = self
         self.uiDelegate = self
     }
     
     func addJavascript() {
-        userContentController.add(self, name: "sayhello")
+        userContentController.add(self, name: "qsqapi")
     }
     
     func removeJavascript() {
-        userContentController.removeScriptMessageHandler(forName: "sayhello")
+        userContentController.removeScriptMessageHandler(forName: "qsqapi")
     }
     
     deinit {
         debugPrint("Bridge webview deinit")
     }
+}
+
+extension BridgeWebview: WKUIDelegate, WKNavigationDelegate, WKScriptMessageHandler {
+    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        debugPrint("name: \(message.name), body: \(message.body), frameInfo: \(message.frameInfo)")
+    }
     
-    func registerNatureFunction(bridgeClass: AnyClass) {
-        
-        var injecttion = "EasyJS.inject(\""
-        injecttion.append("qsqapi")
-        injecttion.append("\", [")
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        let urlStr = navigationAction.request.url?.absoluteString
+        debugPrint(urlStr)
+        decisionHandler(.allow)
+    }
+}
+
+class BridgeParser {
+    public static func registerNatureFunction(bridgeClass: AnyClass) -> String {
+        var injection = "EasyJS.inject('"
+        injection.append("qsqapi")
+        injection.append("', [")
         
         var methodCount: CUnsignedInt = 0
         let mlist = class_copyMethodList(bridgeClass, &methodCount)
@@ -51,26 +81,35 @@ class BridgeWebview: WKWebView {
         
         if let methodList = mlist {
             for i in 0..<Int(methodCount) {
-                injecttion.append("\"")
+                injection.append("'")
                 let sel = sel_getName(method_getName(methodList[i]))
                 let name = String(cString: sel)
-                injecttion.append(name)
-                injecttion.append("\"")
+                injection.append(name)
+                injection.append("'")
                 if i != Int(methodCount) - 1{
-                    injecttion.append(", ")
+                    injection.append(", ")
                 }
                 print("functionName: \(name)")
             }
             free(mlist)
         }
         
-        injecttion.append("]);")
-        debugPrint(injecttion)
+        injection.append("]);")
+        
+        return injection
     }
 }
 
-extension BridgeWebview: WKUIDelegate, WKNavigationDelegate, WKScriptMessageHandler {
-    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        debugPrint("name: \(message.name), body: \(message.body), frameInfo: \(message.frameInfo)")
+class BridgeExecutor {
+    func executorBridgeCallback() {
+        
+    }
+    
+    private func parserCallbackUrl(string: String) {
+        guard string.hasPrefix("easy-js:") else {
+            return
+        }
+        
+        
     }
 }

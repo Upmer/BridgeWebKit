@@ -35,6 +35,7 @@ call: function (obj, functionName, args) {
     
     var iframe = document.createElement("IFRAME");
     iframe.setAttribute("src", "easy-js:" + obj + ":" + encodeURIComponent(functionName) + argStr);
+    console.log("easy-js:" + obj + ":" + encodeURIComponent(functionName) + argStr);
     document.documentElement.appendChild(iframe);
     iframe.parentNode.removeChild(iframe);
     iframe = null;

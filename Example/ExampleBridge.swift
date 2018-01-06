@@ -11,17 +11,21 @@ import UIKit
 class ExampleBridge: NatureBridge {
     var name = "Peter"
     
+    @objc func showAlert() {
+        
+    }
+    
     @objc func sysPlatform() -> String {
         debugPrint("sysPlatform")
         return "{\"a\":1}"
     }
-    
-    
+
+
     @objc func openView(_ type: String, _ jsonToString: String) {
         debugPrint(type)
         debugPrint(jsonToString)
     }
-    
+
     @objc func call(_ phone: String) {
         debugPrint("phone ==== \(phone)")
     }

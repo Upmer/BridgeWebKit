@@ -16,15 +16,16 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let webview = BridgeWebview()
+        let webview = BridgeWebview(bridgeClass: ExampleBridge.self)
         webview.frame = view.bounds
         
-//        webview.load(URLRequest(url: URL(fileURLWithPath: Bundle.main.path(forResource: "index", ofType: "html")!)))
-        webview.load(URLRequest(url: URL(string: "http://api.testing-cash.kuainiujinke.com/vue/#/jsbridge")!))
+        webview.load(URLRequest(url: URL(fileURLWithPath: Bundle.main.path(forResource: "index", ofType: "html")!)))
+//        webview.load(URLRequest(url: URL(string: "http://172.16.28.238:1123/#!/example/dsqapitest")!))
         view.addSubview(webview)
         self.webview = webview
-        let example = ExampleBridge()
-        webview.registerNatureFunction(bridgeClass: ExampleBridge.self)
+//        webview.addJavascript()
+        
+        
     }
     
     deinit {
