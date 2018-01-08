@@ -10,7 +10,7 @@ import UIKit
 import WebKit
 
 class NatureBridge: NSObject {
-    weak var webView: WKWebView!
+    weak var webView: BridgeWebview!
 }
 
 class BridgeWebview: WKWebView {
@@ -19,9 +19,9 @@ class BridgeWebview: WKWebView {
     
     var bridge: NatureBridge!
     
-    convenience init(bridge: NatureBridge) {
+    convenience init(bridge: NatureBridge, injectJs: [String]) {
         
-        let injectJs: String = { () -> String in
+        let baseJs: String = { () -> String in
             if let path = Bundle.main.path(forResource: "easyjs-inject", ofType: "js") {
                 let js = try? String(contentsOfFile: path, encoding: .utf8)
                 return js?.replacingOccurrences(of: "\n", with: "").replacingOccurrences(of: "\t", with: "") ?? ""
@@ -32,11 +32,14 @@ class BridgeWebview: WKWebView {
         let configuration = WKWebViewConfiguration()
         let userContentController = WKUserContentController()
         configuration.userContentController = userContentController
+        
         let cls: AnyClass = object_getClass(bridge)!
-        let injectScript = WKUserScript(source: injectJs, injectionTime: .atDocumentStart, forMainFrameOnly: false)
+        let injectScript = WKUserScript(source: baseJs, injectionTime: .atDocumentStart, forMainFrameOnly: false)
         userContentController.addUserScript(injectScript)
-        debugPrint(BridgeParser.registerNatureFunction(bridgeClass: cls))
         userContentController.addUserScript(WKUserScript(source: BridgeParser.registerNatureFunction(bridgeClass: cls), injectionTime: .atDocumentStart, forMainFrameOnly: false))
+        for js in injectJs {
+            userContentController.addUserScript(WKUserScript(source: js, injectionTime: .atDocumentStart, forMainFrameOnly: false))
+        }
         
         self.init(frame: CGRect.zero, configuration: configuration)
         
@@ -54,6 +57,16 @@ class BridgeWebview: WKWebView {
     
     func removeJavascript() {
         userContentController.removeScriptMessageHandler(forName: "qsqapi")
+    }
+    
+    func setRetValue(v: String) {
+        var finished: Bool = false
+        var count = 0;
+        let js = "(function() {window.EasyJS.retValue=\(v); })();"
+        evaluateJavaScript(js) { (res, error) in
+            debugPrint("evaluateJavaScript", res, error)
+            finished = true
+        }
     }
     
     deinit {

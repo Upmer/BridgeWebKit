@@ -16,7 +16,9 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let webview = BridgeWebview(bridge: ExampleBridge())
+        let exam = ExampleBridge()
+        let infoJs = "EasyJS.systemInfo=\(exam.sysPlatform())"
+        let webview = BridgeWebview(bridge: exam, injectJs: [infoJs]);
         webview.frame = view.bounds
         
 //        webview.load(URLRequest(url: URL(fileURLWithPath: Bundle.main.path(forResource: "index", ofType: "html")!)))

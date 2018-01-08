@@ -10,7 +10,6 @@ import UIKit
 import AddressBook
 
 class ExampleBridge: NatureBridge {
-    var name = "Peter"
     
     @objc func showAlert() {
         debugPrint("show alert")

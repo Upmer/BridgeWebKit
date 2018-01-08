@@ -12,12 +12,12 @@
         <a onclick="showView()" class="waves-effect waves-light btn"><i class="material-icons left">sysPlatform</i></a>
     </body>
     <script type="text/javascript">
-    function sysPlatform()
+    function showAlert()
         {
             window.webkit.messageHandlers.sayhello.postMessage({body: 'hello world!'});
         }
-    function showAlert() {
-        window.dsqapi.showAlert()
+    function sysPlatform() {
+        window.dsqapi.sysPlatform()
     }
     function call() {
         window.dsqapi.call("13888888888")

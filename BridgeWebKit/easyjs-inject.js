@@ -1,6 +1,8 @@
 window.EasyJS = {
 __callbacks: {},
     
+syncProperty: [],
+    
 invokeCallback: function (cbID, removeAfterExecute) {
     var args = Array.prototype.slice.call(arguments);
     args.shift();
@@ -18,6 +20,7 @@ invokeCallback: function (cbID, removeAfterExecute) {
 },
     
 call: function (obj, functionName, args) {
+    var tmpTitle = document.title;
     var formattedArgs = [];
     for (var i = 0, l = args.length; i < l; i++) {
         
@@ -33,6 +36,8 @@ call: function (obj, functionName, args) {
     iframe.parentNode.removeChild(iframe);
     iframe = null;
     
+    
+    console.log(navigator.userAgent);
     var ret = EasyJS.retValue;
     EasyJS.retValue = undefined;
     
@@ -72,4 +77,14 @@ injectProperty: function (obj, properties) {
          })();
     }
 },
+    
+sleep: function (numberMillis) {
+        var now = new Date();
+        var exitTime = now.getTime() + numberMillis;
+        while (true) {
+            now = new Date();
+            if (now.getTime() > exitTime)
+                return;
+        }
+    }
 };
