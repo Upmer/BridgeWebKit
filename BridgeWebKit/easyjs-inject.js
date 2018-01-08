@@ -20,18 +20,11 @@ invokeCallback: function (cbID, removeAfterExecute) {
 call: function (obj, functionName, args) {
     var formattedArgs = [];
     for (var i = 0, l = args.length; i < l; i++) {
-        if (typeof args[i] == "function") {
-            formattedArgs.push("f");
-            var cbID = "__cb" + (+new Date);
-            EasyJS.__callbacks[cbID] = args[i];
-            formattedArgs.push(cbID);
-        } else {
-            formattedArgs.push("s");
-            formattedArgs.push(encodeURIComponent(args[i]));
-        }
+        
+        formattedArgs.push(encodeURIComponent(args[i]));
     }
     
-    var argStr = (formattedArgs.length > 0 ? ":" + encodeURIComponent(formattedArgs.join(":")) : "");
+    var argStr = (formattedArgs.length > 0 ? "?" + encodeURIComponent(formattedArgs.join("&")) : "");
     
     var iframe = document.createElement("IFRAME");
     iframe.setAttribute("src", "easy-js:" + obj + ":" + encodeURIComponent(functionName) + argStr);
@@ -40,7 +33,12 @@ call: function (obj, functionName, args) {
     iframe.parentNode.removeChild(iframe);
     iframe = null;
     
-    return EasyJS.getRetValue();
+    var ret = EasyJS.retValue;
+    EasyJS.retValue = undefined;
+    
+    if (ret){
+        return decodeURIComponent(ret);
+    }
     
 },
     

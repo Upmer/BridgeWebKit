@@ -7,15 +7,24 @@
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
                     </head>
     <body>
-        <a onclick="showAlert()" class="waves-effect waves-light btn"><i class="material-icons left">cloud</i>button</a>
+        <a onclick="sysPlatform()" class="waves-effect waves-light btn"><i class="material-icons left">sysPlatform</i></a>
+        <a onclick="call()" class="waves-effect waves-light btn"><i class="material-icons left">call phone</i></a>
+        <a onclick="showView()" class="waves-effect waves-light btn"><i class="material-icons left">sysPlatform</i></a>
     </body>
     <script type="text/javascript">
-    function say()
+    function sysPlatform()
         {
             window.webkit.messageHandlers.sayhello.postMessage({body: 'hello world!'});
         }
     function showAlert() {
-        window.qsqapi.showAlert()
+        window.dsqapi.showAlert()
     }
+    function call() {
+        window.dsqapi.call("13888888888")
+    }
+    function showView() {
+        window.dsqapi.openView("1111", "2222")
+    }
+    
     </script>
 </html>

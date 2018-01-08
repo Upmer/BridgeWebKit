@@ -11,6 +11,7 @@
 		83099D5D1FED2CF2009DE954 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 839A130D1FEBB28300D1E373 /* Main.storyboard */; };
 		8378115E1FFF822F00A29098 /* easyjs-inject.js in Resources */ = {isa = PBXBuildFile; fileRef = 8378115D1FFF822F00A29098 /* easyjs-inject.js */; };
 		837811601FFF886900A29098 /* ExampleBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8378115F1FFF886900A29098 /* ExampleBridge.swift */; };
+		838ADA462003145C0092FD92 /* BridgeInvocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 838ADA452003145C0092FD92 /* BridgeInvocation.m */; };
 		839A12F01FEBB20000D1E373 /* BridgeWebKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839A12EF1FEBB20000D1E373 /* BridgeWebKitTests.swift */; };
 		839A12FB1FEBB20000D1E373 /* BridgeWebKitUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839A12FA1FEBB20000D1E373 /* BridgeWebKitUITests.swift */; };
 		839A13111FEBB28300D1E373 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839A13091FEBB28300D1E373 /* AppDelegate.swift */; };
@@ -41,6 +42,9 @@
 /* Begin PBXFileReference section */
 		8378115D1FFF822F00A29098 /* easyjs-inject.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "easyjs-inject.js"; sourceTree = "<group>"; };
 		8378115F1FFF886900A29098 /* ExampleBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleBridge.swift; sourceTree = "<group>"; };
+		838ADA432003145C0092FD92 /* BridgeWebKit-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BridgeWebKit-Bridging-Header.h"; sourceTree = "<group>"; };
+		838ADA442003145C0092FD92 /* BridgeInvocation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgeInvocation.h; sourceTree = "<group>"; };
+		838ADA452003145C0092FD92 /* BridgeInvocation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BridgeInvocation.m; sourceTree = "<group>"; };
 		839A12D71FEBB20000D1E373 /* BridgeWebKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BridgeWebKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		839A12EB1FEBB20000D1E373 /* BridgeWebKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BridgeWebKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		839A12EF1FEBB20000D1E373 /* BridgeWebKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeWebKitTests.swift; sourceTree = "<group>"; };
@@ -142,6 +146,9 @@
 			children = (
 				8378115D1FFF822F00A29098 /* easyjs-inject.js */,
 				839A13181FEBB34100D1E373 /* BridgeWebview.swift */,
+				838ADA442003145C0092FD92 /* BridgeInvocation.h */,
+				838ADA452003145C0092FD92 /* BridgeInvocation.m */,
+				838ADA432003145C0092FD92 /* BridgeWebKit-Bridging-Header.h */,
 			);
 			path = BridgeWebKit;
 			sourceTree = "<group>";
@@ -288,6 +295,7 @@
 				839A13191FEBB34100D1E373 /* BridgeWebview.swift in Sources */,
 				839A13161FEBB28300D1E373 /* ViewController.swift in Sources */,
 				839A13111FEBB28300D1E373 /* AppDelegate.swift in Sources */,
+				838ADA462003145C0092FD92 /* BridgeInvocation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -461,7 +469,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.upmer.BridgeWebKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "BridgeWebKit/BridgeWebKit-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -480,7 +488,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.upmer.BridgeWebKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "BridgeWebKit/BridgeWebKit-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

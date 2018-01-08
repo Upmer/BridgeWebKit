@@ -9,7 +9,9 @@
 import UIKit
 import WebKit
 
-class NatureBridge: NSObject { }
+class NatureBridge: NSObject {
+    weak var webView: WKWebView!
+}
 
 class BridgeWebview: WKWebView {
     
@@ -38,6 +40,7 @@ class BridgeWebview: WKWebView {
         
         self.init(frame: CGRect.zero, configuration: configuration)
         
+        bridge.webView = self
         self.bridge = bridge
         
         self.userContentController = userContentController
@@ -65,6 +68,7 @@ extension BridgeWebview: WKUIDelegate, WKNavigationDelegate, WKScriptMessageHand
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         let urlStr = navigationAction.request.url?.absoluteString
+        debugPrint(urlStr?.replacingOccurrences(of: "%3A", with: ":"))
         BridgeExecutor().executorBridgeCallback(url: urlStr ?? "", bridge: bridge)
         decisionHandler(.allow)
     }
@@ -73,7 +77,7 @@ extension BridgeWebview: WKUIDelegate, WKNavigationDelegate, WKScriptMessageHand
 class BridgeParser {
     public static func registerNatureFunction(bridgeClass: AnyClass) -> String {
         var injection = "EasyJS.inject('"
-        injection.append("qsqapi")
+        injection.append("dsqapi")
         injection.append("', [")
         
         var methodCount: CUnsignedInt = 0
@@ -103,20 +107,32 @@ class BridgeParser {
 
 class BridgeExecutor {
     func executorBridgeCallback(url: String, bridge: NatureBridge) {
-        if let method = parserCallbackUrl(string: url) {
+        let result: (String?, [String]) = parserCallbackUrl(string: url)
+        if let method = result.0 {
+            debugPrint(method)
+            // openView(_ type: String, _ jsonToString: String)
             let selector = NSSelectorFromString(method)
-            bridge.perform(selector)
-//            bridge.performSelector(onMainThread: <#T##Selector#>, with: <#T##Any?#>, waitUntilDone: <#T##Bool#>)
+            let signature = bridge.classForCoder.instanceMethod(for: selector)
+            
+//            bridge.performSelector(onMainThread: selector, with: "23424", waitUntilDone: false)
+            BridgeInvocation.excuteNatureBridge(withMethod: method, argments: result.1, interface: bridge)
         }
     }
     
-    private func parserCallbackUrl(string: String) -> String? {
+    private func parserCallbackUrl(string: String) -> (String?, [String]) {
         guard string.hasPrefix("easy-js:") else {
-            return nil
+            return (nil, [])
         }
         
-        let components = string.components(separatedBy: ":")
-        let method = components[2]
-        return method
+        let components = string.components(separatedBy: "?")
+        let objs = components[0].components(separatedBy: ":")
+        
+        var args: [String] = []
+        if components.count > 1 {
+            args = components[1].replacingOccurrences(of: "%26", with: "&").components(separatedBy: "&")
+        }
+        let method: String? = objs[2].replacingOccurrences(of: "%3A", with: ":")
+        debugPrint(args)
+        return (method, args)
     }
 }

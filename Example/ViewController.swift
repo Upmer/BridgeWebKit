@@ -19,8 +19,8 @@ class ViewController: UIViewController {
         let webview = BridgeWebview(bridge: ExampleBridge())
         webview.frame = view.bounds
         
-        webview.load(URLRequest(url: URL(fileURLWithPath: Bundle.main.path(forResource: "index", ofType: "html")!)))
-//        webview.load(URLRequest(url: URL(string: "http://172.16.28.238:1123/#!/example/dsqapitest")!))
+//        webview.load(URLRequest(url: URL(fileURLWithPath: Bundle.main.path(forResource: "index", ofType: "html")!)))
+        webview.load(URLRequest(url: URL(string: "http://172.16.28.238:1123/#!/example/dsqapitest")!))
         view.addSubview(webview)
         self.webview = webview
 //        webview.addJavascript()
