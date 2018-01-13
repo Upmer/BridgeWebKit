@@ -17,23 +17,25 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         let exam = ExampleBridge()
-        let infoJs = "EasyJS.systemInfo=\(exam.sysPlatform())"
-        let webview = BridgeWebview(bridge: exam, injectJs: [infoJs]);
+        
+        let async = ["sysPlatform": exam.sysPlatform]
+        let webview = BridgeWebview(bridge: exam, injectJs: async);
         webview.frame = view.bounds
         
-//        webview.load(URLRequest(url: URL(fileURLWithPath: Bundle.main.path(forResource: "index", ofType: "html")!)))
-        webview.load(URLRequest(url: URL(string: "http://172.16.28.238:1123/#!/example/dsqapitest")!))
+        webview.load(URLRequest(url: URL(fileURLWithPath: Bundle.main.path(forResource: "index", ofType: "html")!)))
+//        webview.load(URLRequest(url: URL(string: "http://172.16.28.238:1123/#!/example/dsqapitest")!))
         view.addSubview(webview)
         self.webview = webview
-//        webview.addJavascript()
         
-        
+//        perform(#selector(update), with: nil, afterDelay: 10)
+    }
+    
+    @objc func update() {
+        webview.updateSyncProperty()
     }
     
     deinit {
         debugPrint("webview controller deinit")
-        webview.removeJavascript()
     }
 }
-
 

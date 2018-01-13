@@ -19,7 +19,9 @@ class BridgeWebview: WKWebView {
     
     var bridge: NatureBridge!
     
-    convenience init(bridge: NatureBridge, injectJs: [String]) {
+    private var syncObjs: [String: (() -> String)] = [:]
+    
+    convenience init(bridge: NatureBridge, injectJs: [String: (() -> String)]) {
         
         let baseJs: String = { () -> String in
             if let path = Bundle.main.path(forResource: "easyjs-inject", ofType: "js") {
@@ -34,39 +36,38 @@ class BridgeWebview: WKWebView {
         configuration.userContentController = userContentController
         
         let cls: AnyClass = object_getClass(bridge)!
+        // 1. base js
         let injectScript = WKUserScript(source: baseJs, injectionTime: .atDocumentStart, forMainFrameOnly: false)
         userContentController.addUserScript(injectScript)
-        userContentController.addUserScript(WKUserScript(source: BridgeParser.registerNatureFunction(bridgeClass: cls), injectionTime: .atDocumentStart, forMainFrameOnly: false))
-        for js in injectJs {
+        
+        // 2.
+        for (p, f) in injectJs {
+            let js = "EasyJS.syncProperty.\(p)=\(f());"
+            debugPrint(js, f)
             userContentController.addUserScript(WKUserScript(source: js, injectionTime: .atDocumentStart, forMainFrameOnly: false))
         }
+        
+        userContentController.addUserScript(WKUserScript(source: BridgeParser.registerNatureFunction(bridgeClass: cls), injectionTime: .atDocumentStart, forMainFrameOnly: false))
         
         self.init(frame: CGRect.zero, configuration: configuration)
         
         bridge.webView = self
         self.bridge = bridge
+        self.syncObjs = injectJs
         
         self.userContentController = userContentController
         self.navigationDelegate = self
         self.uiDelegate = self
     }
     
-    func addJavascript() {
-        userContentController.add(self, name: "qsqapi")
-    }
-    
-    func removeJavascript() {
-        userContentController.removeScriptMessageHandler(forName: "qsqapi")
-    }
-    
-    func setRetValue(v: String) {
-        var finished: Bool = false
-        var count = 0;
-        let js = "(function() {window.EasyJS.retValue=\(v); })();"
-        evaluateJavaScript(js) { (res, error) in
-            debugPrint("evaluateJavaScript", res, error)
-            finished = true
+    func updateSyncProperty() {
+        var js = "(function() {"
+        for (p, f) in syncObjs {
+            js += "EasyJS.syncProperty.\(p)=\(f());"
         }
+        js += "})();"
+        debugPrint(js)
+        evaluateJavaScript(js, completionHandler: nil)
     }
     
     deinit {
@@ -84,6 +85,7 @@ extension BridgeWebview: WKUIDelegate, WKNavigationDelegate, WKScriptMessageHand
         debugPrint(urlStr?.replacingOccurrences(of: "%3A", with: ":"))
         BridgeExecutor().executorBridgeCallback(url: urlStr ?? "", bridge: bridge)
         decisionHandler(.allow)
+        
     }
 }
 
@@ -113,21 +115,20 @@ class BridgeParser {
         }
         
         injection.append("]);")
+        debugPrint(injection)
         
         return injection
     }
 }
 
-class BridgeExecutor {
+class BridgeExecutor: NSObject {
     func executorBridgeCallback(url: String, bridge: NatureBridge) {
         let result: (String?, [String]) = parserCallbackUrl(string: url)
         if let method = result.0 {
             debugPrint(method)
             // openView(_ type: String, _ jsonToString: String)
             let selector = NSSelectorFromString(method)
-            let signature = bridge.classForCoder.instanceMethod(for: selector)
             
-//            bridge.performSelector(onMainThread: selector, with: "23424", waitUntilDone: false)
             BridgeInvocation.excuteNatureBridge(withMethod: method, argments: result.1, interface: bridge)
         }
     }
@@ -147,5 +148,16 @@ class BridgeExecutor {
         let method: String? = objs[2].replacingOccurrences(of: "%3A", with: ":")
         debugPrint(args)
         return (method, args)
+        /*
+         
+         messageJSON = [messageJSON stringByReplacingOccurrencesOfString:@"\\" withString:@"\\\\"];
+         messageJSON = [messageJSON stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
+         messageJSON = [messageJSON stringByReplacingOccurrencesOfString:@"\'" withString:@"\\\'"];
+         messageJSON = [messageJSON stringByReplacingOccurrencesOfString:@"\n" withString:@"\\n"];
+         messageJSON = [messageJSON stringByReplacingOccurrencesOfString:@"\r" withString:@"\\r"];
+         messageJSON = [messageJSON stringByReplacingOccurrencesOfString:@"\f" withString:@"\\f"];
+         messageJSON = [messageJSON stringByReplacingOccurrencesOfString:@"\u2028" withString:@"\\u2028"];
+         messageJSON = [messageJSON stringByReplacingOccurrencesOfString:@"\u2029" withString:@"\\u2029"];
+         */
     }
 }

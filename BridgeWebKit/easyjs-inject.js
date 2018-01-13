@@ -1,7 +1,7 @@
 window.EasyJS = {
 __callbacks: {},
     
-syncProperty: [],
+syncProperty: {},
     
 invokeCallback: function (cbID, removeAfterExecute) {
     var args = Array.prototype.slice.call(arguments);
@@ -36,8 +36,6 @@ call: function (obj, functionName, args) {
     iframe.parentNode.removeChild(iframe);
     iframe = null;
     
-    
-    console.log(navigator.userAgent);
     var ret = EasyJS.retValue;
     EasyJS.retValue = undefined;
     
@@ -45,6 +43,25 @@ call: function (obj, functionName, args) {
         return decodeURIComponent(ret);
     }
     
+},
+    
+callSync: function (obj, functionName, args) {
+    var tmpTitle = document.title;
+    var formattedArgs = [];
+    for (var i = 0, l = args.length; i < l; i++) {
+        
+        formattedArgs.push(encodeURIComponent(args[i]));
+    }
+    
+    var argStr = (formattedArgs.length > 0 ? "?" + encodeURIComponent(formattedArgs.join("&")) : "");
+    
+    var iframe = document.createElement("IFRAME");
+    iframe.setAttribute("src", "easy-js:" + obj + ":" + encodeURIComponent(functionName) + argStr);
+    document.documentElement.appendChild(iframe);
+    iframe.parentNode.removeChild(iframe);
+    iframe = null;
+    
+    return EasyJS.syncProperty[functionName];
 },
     
 inject: function (obj, methods) {
@@ -55,9 +72,13 @@ inject: function (obj, methods) {
         (function () {
          var method = methods[i];
          var jsMethod = method.replace(new RegExp(":", "g"), "");
-         jsObj[jsMethod] = function () {
-         return EasyJS.call(obj, method, Array.prototype.slice.call(arguments));
-         };
+             jsObj[jsMethod] = function () {
+                 if (EasyJS.syncProperty[method]) {
+                    return EasyJS.callSync(obj, method, Array.prototype.slice.call(arguments));
+                 } else {
+                     return EasyJS.call(obj, method, Array.prototype.slice.call(arguments));
+                 }
+             };
          })();
     }
 },
@@ -78,13 +99,4 @@ injectProperty: function (obj, properties) {
     }
 },
     
-sleep: function (numberMillis) {
-        var now = new Date();
-        var exitTime = now.getTime() + numberMillis;
-        while (true) {
-            now = new Date();
-            if (now.getTime() > exitTime)
-                return;
-        }
-    }
 };

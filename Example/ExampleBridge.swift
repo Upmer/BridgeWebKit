@@ -17,7 +17,8 @@ class ExampleBridge: NatureBridge {
     
     @objc func sysPlatform() -> String {
         debugPrint("sysPlatform")
-        return "{\"a\":1}"
+        return "{\"a\":1, \"time\": \(Date().timeIntervalSince1970)}"
+        
     }
 
 

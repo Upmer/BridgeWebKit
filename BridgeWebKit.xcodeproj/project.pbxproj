@@ -129,6 +129,7 @@
 		839A13081FEBB28300D1E373 /* Example */ = {
 			isa = PBXGroup;
 			children = (
+				838ADA432003145C0092FD92 /* BridgeWebKit-Bridging-Header.h */,
 				839A13091FEBB28300D1E373 /* AppDelegate.swift */,
 				839A130A1FEBB28300D1E373 /* Assets.xcassets */,
 				839A130B1FEBB28300D1E373 /* LaunchScreen.storyboard */,
@@ -148,7 +149,6 @@
 				839A13181FEBB34100D1E373 /* BridgeWebview.swift */,
 				838ADA442003145C0092FD92 /* BridgeInvocation.h */,
 				838ADA452003145C0092FD92 /* BridgeInvocation.m */,
-				838ADA432003145C0092FD92 /* BridgeWebKit-Bridging-Header.h */,
 			);
 			path = BridgeWebKit;
 			sourceTree = "<group>";
@@ -469,7 +469,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.upmer.BridgeWebKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "BridgeWebKit/BridgeWebKit-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Example/BridgeWebKit-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -488,7 +488,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.upmer.BridgeWebKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "BridgeWebKit/BridgeWebKit-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Example/BridgeWebKit-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
