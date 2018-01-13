@@ -43,7 +43,6 @@ class BridgeWebview: WKWebView {
         // 2.
         for (p, f) in injectJs {
             let js = "EasyJS.syncProperty.\(p)=\(f());"
-            debugPrint(js, f)
             userContentController.addUserScript(WKUserScript(source: js, injectionTime: .atDocumentStart, forMainFrameOnly: false))
         }
         
@@ -66,7 +65,6 @@ class BridgeWebview: WKWebView {
             js += "EasyJS.syncProperty.\(p)=\(f());"
         }
         js += "})();"
-        debugPrint(js)
         evaluateJavaScript(js, completionHandler: nil)
     }
     
@@ -115,7 +113,6 @@ class BridgeParser {
         }
         
         injection.append("]);")
-        debugPrint(injection)
         
         return injection
     }
@@ -125,10 +122,6 @@ class BridgeExecutor: NSObject {
     func executorBridgeCallback(url: String, bridge: NatureBridge) {
         let result: (String?, [String]) = parserCallbackUrl(string: url)
         if let method = result.0 {
-            debugPrint(method)
-            // openView(_ type: String, _ jsonToString: String)
-            let selector = NSSelectorFromString(method)
-            
             BridgeInvocation.excuteNatureBridge(withMethod: method, argments: result.1, interface: bridge)
         }
     }

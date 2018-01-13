@@ -35,14 +35,6 @@ call: function (obj, functionName, args) {
     document.documentElement.appendChild(iframe);
     iframe.parentNode.removeChild(iframe);
     iframe = null;
-    
-    var ret = EasyJS.retValue;
-    EasyJS.retValue = undefined;
-    
-    if (ret){
-        return decodeURIComponent(ret);
-    }
-    
 },
     
 callSync: function (obj, functionName, args) {
